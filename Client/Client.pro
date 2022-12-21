@@ -4,4 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        Pipe_Manager.cpp \
         main.cpp
+
+HEADERS += \
+    Pipe_Manager.h
