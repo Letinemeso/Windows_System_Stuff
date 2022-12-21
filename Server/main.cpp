@@ -7,7 +7,7 @@ int main()
 
 	Process_Manager process_manager;
 
-	process_manager.create_process("C:/Users/User/Desktop/executable/client.exe");
+	process_manager.create_process("../Client/debug/Client.exe");
 
 	if (process_manager.last_error())
 		return 1;
