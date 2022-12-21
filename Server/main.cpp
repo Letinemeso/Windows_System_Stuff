@@ -1,38 +1,29 @@
-#include "Process_Manager.h"
-#include "Pipe_Manager.h"
+#include "Mailbox_Manager.h"
+
+#include <thread>
+#include <chrono>
 
 int main()
 {
-	Pipe_Manager pipe_manager;
+	Mailbox_Manager mailbox_manager;
 
-	Process_Manager process_manager;
-
-	process_manager.create_process("../Client/debug/Client.exe");
-
-	if (process_manager.last_error())
+	mailbox_manager.connect_to_mailbox("\\\\.\\mailslot\\CLIENT_MAILBOX");
+	if(mailbox_manager.last_error())
 		return 1;
 
-	pipe_manager.create_pipe("\\\\.\\pipe\\$MyPipe$");
-
-	if (pipe_manager.last_error())
+	mailbox_manager.create_mailbox("\\\\.\\mailslot\\SERVER_MAILBOX");
+	if(mailbox_manager.last_error())
 		return 1;
 
-	pipe_manager.send_message("file.txt");
+//	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	if (pipe_manager.last_error())
-		return 1;
+	mailbox_manager.send_message("test 1");
+	mailbox_manager.send_message("test 2");
+	mailbox_manager.send_message("test 3");
+	mailbox_manager.send_message("test 4");
+	mailbox_manager.send_message("test 5");
 
-	pipe_manager.send_message("-");
-
-	if (pipe_manager.last_error())
-		return 1;
-
-	process_manager.wait_for_process_end();
-
-	if (process_manager.last_error())
-		return 1;
-
-	pipe_manager.close_pipe();
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 	
 	return 0;
 }

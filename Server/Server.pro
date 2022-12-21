@@ -1,13 +1,13 @@
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += console c++17
 CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        Pipe_Manager.cpp \
+        Mailbox_Manager.cpp \
         Process_Manager.cpp \
         main.cpp
 
 HEADERS += \
-    Pipe_Manager.h \
+    Mailbox_Manager.h \
     Process_Manager.h
