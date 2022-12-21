@@ -11,7 +11,6 @@ class Mailbox_Manager
 private:
 	HANDLE m_read_mailbox = nullptr;
 	HANDLE m_write_mailbox = nullptr;
-	unsigned int m_max_message_length = 512;
 
 	unsigned long int m_last_error = 0;
 
@@ -27,8 +26,6 @@ public:
 	void connect_to_mailbox(const std::string& _name);
 	void close_mailbox();
 	void disconnect();
-
-	void set_max_message_length(unsigned int _value);
 
 public:
 	unsigned long int last_error() const;

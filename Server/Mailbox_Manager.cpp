@@ -82,12 +82,6 @@ void Mailbox_Manager::disconnect()
 }
 
 
-void Mailbox_Manager::set_max_message_length(unsigned int _value)
-{
-	m_max_message_length = _value;
-}
-
-
 
 unsigned long int Mailbox_Manager::last_error() const
 {
