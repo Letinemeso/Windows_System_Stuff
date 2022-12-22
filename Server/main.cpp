@@ -38,8 +38,6 @@ int main()
 	mailbox_manager.send_message("test 4");
 	mailbox_manager.send_message("test 5");
 
-	std::cout << "Server: messages sent\n";
-
 //	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	event_from_server.activate();
@@ -47,8 +45,6 @@ int main()
 //	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
 	event_from_client.wait();
-
-	std::cout << "Server: exiting\n";
 
 	event_from_client.abandon();
 	event_from_server.abandon();
