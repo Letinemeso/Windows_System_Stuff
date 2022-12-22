@@ -112,10 +112,10 @@ std::vector<std::string> Mailbox_Manager::get_messages()
 	std::vector<std::string> result;
 	result.resize(messages_left);
 
-	unsigned long int total_messages = messages_left;
+	const unsigned long int total_messages = messages_left;
 	for(unsigned int i=0; i<total_messages; ++i)
 	{
-		bool recieved_something = GetMailslotInfo(m_read_mailbox, nullptr, &next_message_size, &messages_left, nullptr);
+		recieved_something = GetMailslotInfo(m_read_mailbox, nullptr, &next_message_size, &messages_left, nullptr);
 
 		if (!recieved_something)
 		{
