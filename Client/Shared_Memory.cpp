@@ -75,6 +75,9 @@ void Shared_Memory::use_memory(const std::string &_identificator, unsigned int _
 
 void Shared_Memory::stop_sharing()
 {
+	if(!valid())
+		return;
+
 	UnmapViewOfFile(m_shared_data);
 	CloseHandle(m_file_mapping_handle);
 	m_file_mapping_handle = nullptr;
