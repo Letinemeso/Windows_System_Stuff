@@ -7,47 +7,53 @@
 
 int main()
 {
-	Process_Manager process_manager;
 
-	Event event_from_server;
-	event_from_server.create("event_from_server");
-	if(!event_from_server.valid())
-		return 1;
+	while(true)
+	{
+		Shared_Memory m;
+		m.allocate("id", 256);
+		m.stop_sharing();
+	}
 
-	Shared_Memory memory;
-	memory.allocate("memory", 256);
-	if(!memory.valid())
-		return 1;
+//	Process_Manager process_manager;
 
-	process_manager.create_process("../Server/debug/Server.exe");
-	if(process_manager.last_error())
-		return 1;
+//	Event event_from_server;
+//	event_from_server.create("event_from_server");
+//	if(!event_from_server.valid())
+//		return 1;
 
-	event_from_server.wait();
+//	Shared_Memory memory;
+//	memory.allocate("memory", 256);
+//	if(!memory.valid())
+//		return 1;
 
-	Event event_from_client;
-	event_from_client.connect("event_from_client");
-	if(!event_from_client.valid())
-		return 1;
+//	process_manager.create_process("../Server/debug/Server.exe");
+//	if(process_manager.last_error())
+//		return 1;
 
-	event_from_client.activate();
+//	event_from_server.wait();
 
-//	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+//	Event event_from_client;
+//	event_from_client.connect("event_from_client");
+//	if(!event_from_client.valid())
+//		return 1;
 
-	event_from_server.wait();
+//	event_from_client.activate();
 
-	std::string data = memory.get();
-	if(!memory.valid())
-		return 1;
+//	event_from_server.wait();
 
-	std::cout << data << "\n";
+//	std::string data = memory.get();
+//	if(!memory.valid())
+//		return 1;
 
-	event_from_client.activate();
+//	std::cout << data << "\n";
 
-	process_manager.wait_for_process_end();
+//	event_from_client.activate();
 
-	event_from_client.abandon();
-	event_from_server.abandon();
+//	process_manager.wait_for_process_end();
+
+//	event_from_client.abandon();
+//	event_from_server.abandon();
 
 	return 0;
 }

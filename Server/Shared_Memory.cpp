@@ -77,6 +77,8 @@ void Shared_Memory::stop_sharing()
 {
 	UnmapViewOfFile(m_shared_data);
 	CloseHandle(m_file_mapping_handle);
+	m_file_mapping_handle = nullptr;
+	m_shared_data = nullptr;
 	m_identificator.clear();
 	m_last_error = 0;
 	m_size = 0;
