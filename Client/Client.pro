@@ -7,6 +7,7 @@ SOURCES += \
         Event.cpp \
         Mailbox_Manager.cpp \
         Process_Manager.cpp \
+        Shared_Memory.cpp \
         Utility.cpp \
         main.cpp
 
