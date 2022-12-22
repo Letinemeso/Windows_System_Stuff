@@ -18,10 +18,7 @@ Process_Manager::~Process_Manager()
 
 void Process_Manager::create_process(const std::string& _executable_name)
 {
-	WCHAR* name = new WCHAR[_executable_name.size() + 1];
-	name[_executable_name.size()] = 0;
-	for (unsigned int i = 0; i < _executable_name.size(); ++i)
-		name[i] = _executable_name[i];
+	WCHAR* name = WSS_Utility::convert_to_wide_char(_executable_name);
 
 	if (!CreateProcess(NULL, name, NULL, NULL, TRUE, NULL, NULL, NULL, &m_startup_info, &m_process_info))
 	{

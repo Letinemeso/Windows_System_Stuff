@@ -6,6 +6,8 @@
 
 #include <windows.h>
 
+#include "Utility.h"
+
 class Mailbox_Manager
 {
 private:
@@ -17,9 +19,6 @@ private:
 public:
 	Mailbox_Manager();
 	~Mailbox_Manager();
-
-private:
-	wchar_t* M_convert_to_wide_char(const std::string& _str) const;
 
 public:
 	void create_mailbox(const std::string& _name);

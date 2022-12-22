@@ -13,22 +13,11 @@ Mailbox_Manager::~Mailbox_Manager()
 
 
 
-wchar_t* Mailbox_Manager::M_convert_to_wide_char(const std::string &_str) const
-{
-	WCHAR* wstr = new WCHAR[_str.size() + 1];
-	wstr[_str.size()] = 0;
-	for (unsigned int i = 0; i < _str.size(); ++i)
-		wstr[i] = _str[i];
-	return wstr;
-}
-
-
-
 void Mailbox_Manager::create_mailbox(const std::string& _name)
 {
 	close_mailbox();
 
-	WCHAR* name = M_convert_to_wide_char(_name);
+	WCHAR* name = WSS_Utility::convert_to_wide_char(_name);
 
 	m_read_mailbox = CreateMailslot(name, 0, MAILSLOT_WAIT_FOREVER, NULL);
 
@@ -47,7 +36,7 @@ void Mailbox_Manager::connect_to_mailbox(const std::string& _name)
 {
 	disconnect();
 
-	WCHAR* name = M_convert_to_wide_char(_name);
+	WCHAR* name = WSS_Utility::convert_to_wide_char(_name);
 
 	m_write_mailbox = CreateFile(name, GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 
@@ -79,12 +68,6 @@ void Mailbox_Manager::disconnect()
 		CloseHandle(m_write_mailbox);
 		m_write_mailbox = nullptr;
 	}
-}
-
-
-void Mailbox_Manager::set_max_message_length(unsigned int _value)
-{
-	m_max_message_length = _value;
 }
 
 

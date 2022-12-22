@@ -1,4 +1,5 @@
 #include "Mailbox_Manager.h"
+#include "Event.h"
 
 #include <thread>
 #include <chrono>
@@ -11,11 +12,25 @@ int main()
 	if(mailbox_manager.last_error())
 		return 1;
 
+	Event event_from_server;
+	event_from_server.connect("event_from_server");
+	if(!event_from_server.valid())
+		return 1;
+
+	Event event_from_client;
+	event_from_client.create("event_from_client");
+	if(!event_from_client.valid())
+		return 1;
+
 	mailbox_manager.create_mailbox("\\\\.\\mailslot\\SERVER_MAILBOX");
 	if(mailbox_manager.last_error())
 		return 1;
 
-//	std::this_thread::sleep_for(std::chrono::seconds(2));
+	event_from_server.activate();
+
+//	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+	event_from_client.wait();
 
 	mailbox_manager.send_message("test 1");
 	mailbox_manager.send_message("test 2");
@@ -23,7 +38,20 @@ int main()
 	mailbox_manager.send_message("test 4");
 	mailbox_manager.send_message("test 5");
 
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::cout << "Server: messages sent\n";
+
+//	std::this_thread::sleep_for(std::chrono::seconds(2));
+
+	event_from_server.activate();
+
+//	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+	event_from_client.wait();
+
+	std::cout << "Server: exiting\n";
+
+	event_from_client.abandon();
+	event_from_server.abandon();
 	
 	return 0;
 }
