@@ -17,11 +17,8 @@ int main()
 
 //	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	mailbox_manager.send_message("test 1");
-	mailbox_manager.send_message("test 2");
-	mailbox_manager.send_message("test 3");
-	mailbox_manager.send_message("test 4");
-	mailbox_manager.send_message("test 5");
+	mailbox_manager.send_message("file.txt");
+	mailbox_manager.send_message("-");
 
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 	
