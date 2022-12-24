@@ -1,6 +1,3 @@
-// lab2new.cpp: определяет точку входа для консольного приложения.
-//
-
 #include <stdio.h>
 #include <iostream>
 
@@ -50,7 +47,7 @@ int main()
 	read_from_file_func read_from_file;
 	save_to_file_func save_to_file;
 
-	HINSTANCE dll_handle = LoadLibrary(TEXT("testdll.dll"));
+	HINSTANCE dll_handle = LoadLibrary(TEXT("../DLL/debug/DLL.dll"));
 	if (dll_handle == NULL) {
 		std::cout << "Cannot load library\n";
 		return 1;
