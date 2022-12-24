@@ -23,22 +23,24 @@ int main()
 
 	event_from_server.activate();
 
-//	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
 	event_from_client.wait();
 
-	memory.set("test 1");
-
-//	std::this_thread::sleep_for(std::chrono::seconds(2));
+	memory.set("file.txt");
 
 	event_from_server.activate();
 
-//	std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	event_from_client.wait();
+
+	memory.set("-");
+
+	event_from_server.activate();
 
 	event_from_client.wait();
 
 	event_from_client.abandon();
 	event_from_server.abandon();
+
+	memory.stop_sharing();
 	
 	return 0;
 }
