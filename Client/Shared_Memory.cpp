@@ -21,7 +21,7 @@ void Shared_Memory::allocate(const std::string &_identificator, unsigned int _si
 	m_size = _size;
 
 	wchar_t* name = WSS_Utility::convert_to_wide_char(m_identificator);
-	m_file_mapping_handle = CreateFileMapping((HANDLE)0xFFFFFFFF, NULL, PAGE_READWRITE, 0, m_size, name);
+	m_file_mapping_handle = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, m_size, name);
 	delete[] name;
 
 	if(m_file_mapping_handle == INVALID_HANDLE_VALUE)
