@@ -32,10 +32,38 @@ int main()
 
 	event_from_client.wait();
 
-	mailbox_manager.send_message("file.txt");
-	mailbox_manager.send_message("-");
+	std::vector<std::string> messages = mailbox_manager.get_messages();
+
+	std::cout << messages.size();
+
+	std::string buffer = messages[0];
+	unsigned int size = buffer.size();
+	char symbol_to_insert = messages[1][0];
+
+	unsigned int newline_symbols_count = 0;
+	for (unsigned int i = 0; i < size; ++i)
+		if (buffer[i] == '\n')
+			++newline_symbols_count;
+
+	unsigned int modified_size = size + newline_symbols_count;
+	char* modified_buffer = new char[modified_size];
+
+	unsigned int stride = 0;
+	for (unsigned int i = 0; i < size; ++i)
+	{
+		if (buffer[i] == '\r')
+		{
+			modified_buffer[i + stride] = symbol_to_insert;
+			++stride;
+		}
+		modified_buffer[i + stride] = buffer[i];
+	}
 
 //	std::this_thread::sleep_for(std::chrono::seconds(2));
+
+	mailbox_manager.send_message(modified_buffer);
+
+	delete[] modified_buffer;
 
 	event_from_server.activate();
 

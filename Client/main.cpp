@@ -38,31 +38,10 @@ int main()
 	if(mailbox_manager.last_error())
 		return 1;
 
-	event_from_client.activate();
-
-//	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-	event_from_server.wait();
-
-	std::vector<std::string> messages = mailbox_manager.get_messages();
-	if(mailbox_manager.last_error())
-		return 1;
-
-	event_from_client.activate();
-
-	process_manager.wait_for_process_end();
-
-	std::string file_name = messages[0];
-
-	std::string char_to_insert = messages[1];
-
-	process_manager.wait_for_process_end();
-
-	mailbox_manager.disconnect();
-	mailbox_manager.close_mailbox();
-
-	event_from_client.abandon();
-	event_from_server.abandon();
+	std::string file_name;
+	std::cin >> file_name;
+	std::string char_to_insert;
+	std::cin >> char_to_insert;
 
 	std::cout << "file_name: " << file_name << "\n";
 	std::cout << "char_to_insert: " << char_to_insert << "\n\n";
@@ -78,8 +57,6 @@ int main()
 	strcat_s(line, ".out");
 	wchar_t* outfile = new wchar_t[80];
 	MultiByteToWideChar(CP_ACP, 0, line, -1, outfile, 80);
-
-	char symbol_to_insert = char_to_insert[0];
 
 	read_from_file_func read_from_file;
 	save_to_file_func save_to_file;
@@ -106,36 +83,34 @@ int main()
 		return 1;
 	}
 
-	unsigned int newline_symbols_count = 0;
-	for (unsigned int i = 0; i < size; ++i)
-		if (buffer[i] == '\n')
-			++newline_symbols_count;
+//	event_from_client.activate();
 
-	unsigned int modified_size = size + newline_symbols_count;
-	char* modified_buffer = new char[modified_size];
-
-	unsigned int stride = 0;
-	for (unsigned int i = 0; i < size; ++i)
-	{
-		if (buffer[i] == '\r')
-		{
-			modified_buffer[i + stride] = symbol_to_insert;
-			++stride;
-		}
-		modified_buffer[i + stride] = buffer[i];
-	}
+	mailbox_manager.send_message(buffer);
+	mailbox_manager.send_message(char_to_insert);
 
 	delete[] buffer;
 
-	if (!save_to_file(outfile, modified_buffer, modified_size - 1))
+	event_from_client.activate();
+	event_from_server.wait();
+
+	std::string result = mailbox_manager.get_messages()[0];
+
+	event_from_client.activate();
+
+	mailbox_manager.disconnect();
+	mailbox_manager.close_mailbox();
+
+	process_manager.wait_for_process_end();
+
+	event_from_client.abandon();
+	event_from_server.abandon();
+
+	if (!save_to_file(outfile, result.c_str(), result.size() - 1))
 	{
 		std::cout << "error writing to file\n";
 		FreeLibrary(dll_handle);
-		delete[] modified_buffer;
 		return 1;
 	}
-
-	delete[] modified_buffer;
 
 	FreeLibrary(dll_handle);
 
